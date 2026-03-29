@@ -1,0 +1,70 @@
+# ==============================================================================
+# requirements.txt — PostgreSQL → Pandas Pipeline
+# ==============================================================================
+#
+# FULL EXECUTION GUIDE
+# ──────────────────────────────────────────────────────────────────────────────
+#
+# STEP 0 — Prerequisites
+#   • Python 3.10 or higher  →  python --version
+#   • PostgreSQL running     →  check pgAdmin or: pg_isready -h localhost
+#   • Edit config.py with your actual username and password
+#
+# STEP 1 — Create a virtual environment
+#
+#   Linux / macOS:
+#     python -m venv .venv
+#     source .venv/bin/activate
+#
+#   Windows (CMD):
+#     python -m venv .venv
+#     .venv\Scripts\activate.bat
+#
+#   Windows (PowerShell):
+#     python -m venv .venv
+#     .venv\Scripts\Activate.ps1
+#
+# STEP 2 — Install all dependencies
+#
+#     pip install -r requirements.txt
+#
+# STEP 3 — Run the full pipeline (setup + fetch + benchmark)
+#
+#     python main.py
+#
+# STEP 4 — OR run individual steps
+#
+#     python main.py --setup         # create DB, tables, seed data (run once)
+#     python main.py --fetch         # run all 3 fetch approaches
+#     python main.py --benchmark     # compare driver speeds
+#
+# STEP 5 — Run individual scripts directly
+#
+#     python scripts/db_setup.py
+#     python scripts/fetch_psycopg2.py
+#     python scripts/fetch_psycopg3.py
+#     python scripts/fetch_adbc.py
+#
+# STEP 6 — Open the Jupyter notebook for full analysis
+#
+#     jupyter notebook notebooks/main.ipynb
+#
+# ==============================================================================
+
+
+# ── Core data stack ────────────────────────────────────────────────────────────
+pandas>=2.0                 # DataFrames, analysis, groupby, pivot, parquet I/O
+pyarrow>=14.0               # Arrow backend for Pandas + Parquet read/write
+
+# ── PostgreSQL drivers ─────────────────────────────────────────────────────────
+psycopg2-binary             # Approach 1 — legacy driver (pre-compiled, no build tools needed)
+psycopg[binary]>=3.1        # Approach 2 — modern driver (psycopg3): async, binary protocol
+adbc-driver-postgresql      # Approach 3 — Arrow Database Connectivity (zero-copy columnar)
+
+# ── ORM / SQL engine ───────────────────────────────────────────────────────────
+SQLAlchemy>=2.0             # Unified engine layer used by psycopg2 and psycopg3 scripts
+
+# ── Jupyter notebook ───────────────────────────────────────────────────────────
+jupyter                     # Classic Jupyter server
+notebook                    # Notebook UI (nbclassic interface)
+ipykernel                   # Registers the venv as a Jupyter kernel
